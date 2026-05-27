@@ -33,6 +33,5 @@ def main():
         st.session_state.logged_in = False
         st.session_state.role = None
         st.rerun()
-
-if __name__ == "__main__":
-    main()
+        if __name__ == "__main__":
+            main()
