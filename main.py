@@ -1,5 +1,4 @@
 import streamlit as st
-from utils import auth
 
 def main():
     # १. लॉगिन स्टेट हाताळा
