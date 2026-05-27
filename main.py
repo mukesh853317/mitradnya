@@ -1,4 +1,28 @@
 import streamlit as st
+import google.generativeai as genai
+
+# स्ट्रीमलीट सीक्रेट्स मधून की मिळवा
+api_key = st.secrets["GOOGLE_API_KEY"]
+
+# AI मॉडेल कॉन्फिगर करा
+genai.configure(api_key=api_key)
+model = genai.GenerativeModel('gemini-1.5-flash')
+
+# ॲक्शन बटणच्या आत आता AI ला प्रश्न विचारा
+if st.button("✨ Generate Question Paper", type="primary"):
+    if topic_input:
+        with st.spinner('प्रश्नपत्रिका तयार करत आहे...'):
+            # प्रॉम्प्ट तयार करणे
+            prompt = f"Create a {total_marks} marks question paper for {subject} on the topic: {topic_input}. Include MCQs and short notes."
+            
+            # AI कडून रिस्पॉन्स मिळवणे
+            response = model.generate_content(prompt)
+            
+            # रिझल्ट दाखवणे
+            st.markdown("### जनरेट केलेली प्रश्नपत्रिका:")
+            st.write(response.text)
+    else:
+        st.error("कृपया टॉपिकचे नाव टाका!")
 
 # १. पेजची प्राथमिक सेटिंग (Page Configuration)
 st.set_page_config(page_title="Mitradnya PaperGen", layout="wide")
