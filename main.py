@@ -1,5 +1,4 @@
 import streamlit as st
-from portals import student, admin, parent
 from utils import auth
 
 def main():
