@@ -22,11 +22,11 @@ st.sidebar.button("📄 TYBMS FA Paper", key="h2")
 # ४. मुख्य फॉर्म (Inputs)
 col1, col2, col3 = st.columns(3)
 with col1: university = st.selectbox("University", ["Mumbai University", "Other"])
-with col2: course = st.selectbox("Class", ["TYBCOM", "TYBMS", "MCOM"])
+with col2: course = st.selectbox("Class", [ "FYBCOM", "FYBMS", "FYBAF", "FYBBI", "SYBCOM", "SYBMS", "SYBAF", "SYBBI", "TYBCOM", "TYBMS", "TYBAF", "TYBBI", "MCOM-I", "MCOM-II"])
 with col3: subject = st.selectbox("Subject", ["Indirect Tax (GST)", "Financial Accounting", "Economics"])
 
 tab1, tab2, tab3 = st.tabs(["Topic", "Text Notes", "Upload PDF"])
-with tab1: topic_input = st.text_input("टॉEnter Topic Name", key="t1")
+with tab1: topic_input = st.text_input("Enter Topic Name", key="t1")
 with tab2: text_input = st.text_area("Paste Notes Here", key="t2")
 with tab3: uploaded_file = st.file_uploader("Upload PDF", type="pdf")
 
