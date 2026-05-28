@@ -15,7 +15,7 @@ st.title("Mitradnya PaperGen 🎓")
 
 # २. फॉर्म इनपुट
 col1, col2, col3 = st.columns(3)
-with col1: num_mcqs = st.number_input("MCQs", value=10)
+with col1: num_mcqs = st.number_input("MCQs", value=5)
 with col2: num_short = st.number_input("Short Notes", value=4)
 with col3: num_long = st.number_input("Long Questions", value=2)
 
