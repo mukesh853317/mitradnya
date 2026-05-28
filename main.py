@@ -71,8 +71,8 @@ if st.button("✨ Generate Question Paper", type="primary"):
                 
                 # डाउनलोड बटण
                 st.download_button(
-                    label="📥 Download Paper as pdf",
-                    data=response.text,
+                    label="📥 Download Paper as PDF",
+                    data=response.pdf,
                     file_name="Question_Paper.pdf",
                     mime="text/plain"
                 )
