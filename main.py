@@ -60,7 +60,7 @@ if st.button("✨ Generate Question Paper", type="primary"):
                 
                 st.download_button(
                     label="📥 Download PDF",
-                    data=pdf.output(dest='S').encode('latin-1'),
+                    data=pdf.output(dest='S'),
                     file_name="Question_Paper.pdf",
                     mime="application/pdf"
                 )
