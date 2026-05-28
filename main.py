@@ -1,5 +1,6 @@
 import streamlit as st
 import PyPDF2
+from fpdf import FPDF
 import google.generativeai as genai
 
 # १. पेज सेटअप
