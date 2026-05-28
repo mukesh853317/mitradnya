@@ -71,9 +71,9 @@ if st.button("✨ Generate Question Paper", type="primary"):
                 
                 # डाउनलोड बटण
                 st.download_button(
-                    label="📥 Download Paper as Text",
+                    label="📥 Download Paper as pdf",
                     data=response.text,
-                    file_name="Question_Paper.txt",
+                    file_name="Question_Paper.pdf",
                     mime="text/plain"
                 )
             except Exception as e:
