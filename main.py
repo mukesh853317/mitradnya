@@ -1,78 +1,82 @@
 import streamlit as st
-import os
 import PyPDF2
 import google.generativeai as genai
 
-# १. पेज सेटिंग आणि कॉन्फिगरेशन
+# १. पेज सेटअप
 st.set_page_config(page_title="Mitradnya PaperGen", layout="wide")
 
-# API Key सेट करणे
+# API Configuration
 api_key = st.secrets["GOOGLE_API_KEY"]
 genai.configure(api_key=api_key)
-model = genai.GenerativeModel('gemini-2.5-flash')
+model = genai.GenerativeModel('gemini-1.5-flash')
 
-# २. हेडर
 st.title("Mitradnya PaperGen 🎓")
-st.markdown("### Admin Dashboard - Question Paper Generator")
 st.markdown("---")
 
-# ३. साइडबार
-st.sidebar.header("Previous Year Question Papers")
-st.sidebar.button("📄 TYBCOM GST Paper", key="h1")
-st.sidebar.button("📄 TYBMS FA Paper", key="h2")
-
-# ४. मुख्य फॉर्म (Inputs)
+# २. फॉर्म इनपुट (Blueprint & Class Selection)
 st.subheader("⚙️ प्रश्नपत्रिका आराखडा (Paper Blueprint)")
 col1, col2, col3 = st.columns(3)
-
-with col1:
-    num_mcqs = st.number_input("MCQs संख्या", min_value=0, max_value=50, value=10)
-with col2:
-    num_short = st.number_input("Short Notes संख्या", min_value=0, max_value=10, value=4)
-with col3:
-    num_long = st.number_input("Long Questions संख्या", min_value=0, max_value=5, value=2)
+with col1: num_mcqs = st.number_input("MCQs संख्या", value=10)
+with col2: num_short = st.number_input("Short Notes संख्या", value=4)
+with col3: num_long = st.number_input("Long Questions संख्या", value=2)
 
 col1, col2, col3 = st.columns(3)
 with col1: university = st.selectbox("University", ["Mumbai University", "Other"])
-with col2: course = st.selectbox("Class", [ "FYBCOM", "FYBMS", "FYBAF", "FYBBI", "SYBCOM", "SYBMS", "SYBAF", "SYBBI", "TYBCOM", "TYBMS", "TYBAF", "TYBBI", "MCOM-I", "MCOM-II"])
+with col2: course = st.selectbox("Class", ["FYBCOM", "SYBCOM", "TYBCOM", "TYBMS", "MCOM"])
 with col3: subject = st.selectbox("Subject", ["Indirect Tax (GST)", "Financial Accounting", "Economics", "Financial Maths"])
 
+# ३. कंटेंट इनपुट
 tab1, tab2, tab3 = st.tabs(["Topic", "Text Notes", "Upload PDF"])
-with tab1: topic_input = st.text_input("Enter Topic Name", key="t1")
-with tab2: text_input = st.text_area("Paste Notes Here", key="t2")
+with tab1: topic_input = st.text_input("Enter Topic Name")
+with tab2: text_input = st.text_area("Paste Notes Here")
 with tab3: uploaded_file = st.file_uploader("Upload PDF", type="pdf")
 
 col4, col5 = st.columns(2)
 with col4: total_marks = st.selectbox("Total Marks", [20, 50, 75, 100])
 with col5: difficulty = st.selectbox("Level", ["Easy", "Moderate", "Hard"])
 
-# ५. AI जनरेशन लॉजिक (बटण क्लिक केल्यावर हे चालेल)
-if st.button("✨ Generate Question Paper", type="primary", key="gen_btn"):
+# ४. AI जनरेशन आणि PDF वाचन
+if st.button("✨ Generate Question Paper", type="primary"):
     
+    # PDF किंवा टेक्स्ट मधून डेटा काढणे
+    context = ""
+    if uploaded_file:
+        reader = PyPDF2.PdfReader(uploaded_file)
+        for page in reader.pages:
+            context += page.extract_text()
+    elif text_input:
+        context = text_input
+
     # इनपुट तपासणी
-    input_data = topic_input if topic_input else (text_input if text_input else "General")
-    
-    if input_data:
-        with st.spinner('Generating Question Paper...'):
+    if topic_input or context:
+        with st.spinner('Generating Paper...'):
             try:
-                # प्रॉम्प्ट तयार करणे
                 prompt = f"""
-                Act as a Professor. Create a {total_marks} marks question paper for {course}, {subject}.
-                Topic: {input_data}. 
-                Difficulty: {difficulty}.
-                Include MCQs and Subjective questions.
-                Format the output clearly.
+                Act as an expert professor. Create a {total_marks} marks question paper for {course}, {subject}.
+                Topic: {topic_input}. 
+                Based on this Reference Material: {context[:5000]} (if provided).
+                
+                Strictly follow this structure:
+                - {num_mcqs} Multiple Choice Questions (MCQs)
+                - {num_short} Short Answer Questions
+                - {num_long} Long/Practical Questions
+                
+                Difficulty Level: {difficulty}.
+                Format it neatly with headers.
                 """
                 
-                # AI कॉल
                 response = model.generate_content(prompt)
-                
-                # रिझल्ट दाखवणे
                 st.markdown("### Generated Question Paper:")
                 st.markdown(response.text)
                 
-                # भविष्यात येथे डाऊनलोड बटण जोडता येईल
+                # डाउनलोड बटण
+                st.download_button(
+                    label="📥 Download Paper as Text",
+                    data=response.text,
+                    file_name="Question_Paper.txt",
+                    mime="text/plain"
+                )
             except Exception as e:
                 st.error(f"Technical Error: {e}")
     else:
-        st.error("Please Inseet Topic or Text!")
+        st.error("Please enter a Topic or Upload/Paste your study material!")
