@@ -1,4 +1,6 @@
 import streamlit as st
+import os
+import PyPDF2
 import google.generativeai as genai
 
 # १. पेज सेटिंग आणि कॉन्फिगरेशन
@@ -11,7 +13,7 @@ model = genai.GenerativeModel('gemini-2.5-flash')
 
 # २. हेडर
 st.title("Mitradnya PaperGen 🎓")
-st.markdown("### Admin Dashboard - Question Paaper Generator")
+st.markdown("### Admin Dashboard - Question Paper Generator")
 st.markdown("---")
 
 # ३. साइडबार
@@ -20,6 +22,16 @@ st.sidebar.button("📄 TYBCOM GST Paper", key="h1")
 st.sidebar.button("📄 TYBMS FA Paper", key="h2")
 
 # ४. मुख्य फॉर्म (Inputs)
+st.subheader("⚙️ प्रश्नपत्रिका आराखडा (Paper Blueprint)")
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    num_mcqs = st.number_input("MCQs संख्या", min_value=0, max_value=50, value=10)
+with col2:
+    num_short = st.number_input("Short Notes संख्या", min_value=0, max_value=10, value=4)
+with col3:
+    num_long = st.number_input("Long Questions संख्या", min_value=0, max_value=5, value=2)
+
 col1, col2, col3 = st.columns(3)
 with col1: university = st.selectbox("University", ["Mumbai University", "Other"])
 with col2: course = st.selectbox("Class", [ "FYBCOM", "FYBMS", "FYBAF", "FYBBI", "SYBCOM", "SYBMS", "SYBAF", "SYBBI", "TYBCOM", "TYBMS", "TYBAF", "TYBBI", "MCOM-I", "MCOM-II"])
