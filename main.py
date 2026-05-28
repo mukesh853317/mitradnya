@@ -72,7 +72,7 @@ if st.button("✨ Generate Question Paper", type="primary"):
                 # डाउनलोड बटण
                 st.download_button(
                     label="📥 Download Paper as Text",
-                    data=response.txt,
+                    data=response.text,
                     file_name="Question_Paper.txt",
                     mime="text/plain"
                 )
