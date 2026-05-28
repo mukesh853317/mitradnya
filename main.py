@@ -38,6 +38,21 @@ with col5: difficulty = st.selectbox("Level", ["Easy", "Moderate", "Hard"])
 
 # ४. AI जनरेशन आणि PDF वाचन
 if st.button("✨ Generate Question Paper", type="primary"):
+# ... (AI रिस्पॉन्स मिळाल्यानंतर)
+    response = model.generate_content(prompt)
+    paper_text = response.text
+    
+    st.markdown("### Generated Question Paper:")
+    st.markdown(paper_text)
+
+# PDF तयार करण्यासाठी फंक्शन
+    def create_pdf(text):
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_font("Arial", size=12)
+# मल्टी-सेल वापरून टेक्स्ट PDF मध्ये टाकणे
+        pdf.multi_cell(0, 10, txt=text.encode('latin-1', 'replace').decode('latin-1'))
+        return pdf.output(dest='S').encode('latin-1')
     
     # PDF किंवा टेक्स्ट मधून डेटा काढणे
     context = ""
@@ -72,10 +87,10 @@ if st.button("✨ Generate Question Paper", type="primary"):
                 
                 # डाउनलोड बटण
                 st.download_button(
-                    label="📥 Download Paper as Text",
-                    data=response.text,
-                    file_name="Question_Paper.txt",
-                    mime="text/plain"
+                    label="📥 Download Paper as PDF",
+                    data=create_pdf(paper_text),
+                    file_name="Question_Paper.pdf",
+                    mime="application/pdf"
                 )
             except Exception as e:
                 st.error(f"Technical Error: {e}")
