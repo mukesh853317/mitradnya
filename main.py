@@ -23,7 +23,7 @@ st.sidebar.button("📄 TYBMS FA Paper", key="h2")
 col1, col2, col3 = st.columns(3)
 with col1: university = st.selectbox("University", ["Mumbai University", "Other"])
 with col2: course = st.selectbox("Class", [ "FYBCOM", "FYBMS", "FYBAF", "FYBBI", "SYBCOM", "SYBMS", "SYBAF", "SYBBI", "TYBCOM", "TYBMS", "TYBAF", "TYBBI", "MCOM-I", "MCOM-II"])
-with col3: subject = st.selectbox("Subject", ["Indirect Tax (GST)", "Financial Accounting", "Economics"])
+with col3: subject = st.selectbox("Subject", ["Indirect Tax (GST)", "Financial Accounting", "Economics", "Financial Maths"])
 
 tab1, tab2, tab3 = st.tabs(["Topic", "Text Notes", "Upload PDF"])
 with tab1: topic_input = st.text_input("Enter Topic Name", key="t1")
